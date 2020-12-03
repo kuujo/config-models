@@ -3,9 +3,7 @@ module github.com/onosproject/config-models/{{ .Model.Name }}_{{ .Model.Version 
 go 1.14
 
 require (
-    github.com/onosproject/config-models {{ .Compiler.Version }}
+    github.com/onosproject/config-models v1.0.0
 )
 
-{{- if eq .Compiler.Mode "module" }}
-replace github.com/onosproject/config-models => {{ .Compiler.RelativePath }}
-{{- end }}
+replace github.com/onosproject/config-models => {{ .Compiler.Root }}

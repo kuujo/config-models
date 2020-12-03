@@ -34,7 +34,6 @@ func main() {
 			name, _ := cmd.Flags().GetString("name")
 			version, _ := cmd.Flags().GetString("version")
 			modules, _ := cmd.Flags().GetStringToString("module")
-			mode, _ := cmd.Flags().GetString("mode")
 
 			output, _ := cmd.Flags().GetString("output")
 			if output == "" {
@@ -75,7 +74,6 @@ func main() {
 			config := compiler.PluginCompilerConfig{
 				TemplatePath: templates,
 				OutputPath:   output,
-				Mode:         compiler.Mode(mode),
 			}
 			_, err := compiler.CompilePlugin(model, config)
 			return err
@@ -87,7 +85,6 @@ func main() {
 	compileCmd.Flags().StringToStringP("module", "m", map[string]string{}, "model files")
 	compileCmd.Flags().StringP("output", "o", "", "the output path")
 	compileCmd.Flags().StringP("templates", "t", "", "the templates path")
-	compileCmd.Flags().String("mode", "binary", "the compiler mode")
 	rootCmd.AddCommand(compileCmd)
 
 	if err := rootCmd.Execute(); err != nil {

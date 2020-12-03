@@ -23,7 +23,7 @@ import (
 	"strings"
 )
 
-const pluginSuffix = ".so"
+const pluginExt = ".so."
 const pluginSymbol = "ModelPlugin"
 
 // RepositoryConfig is a model plugin repository config
@@ -57,7 +57,7 @@ func (r *Repository) ListModels() ([]ConfigModel, error) {
 func loadModels(path string) ([]ConfigModel, error) {
 	var files []string
 	err := filepath.Walk(path, func(file string, info os.FileInfo, err error) error {
-		if err == nil && strings.HasSuffix(path, pluginSuffix) {
+		if err == nil && strings.Contains(path, pluginExt) {
 			files = append(files, filepath.Join(path, file))
 		}
 		return nil

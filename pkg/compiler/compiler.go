@@ -56,16 +56,6 @@ const (
 	validatorFile    = "validator.go"
 )
 
-// Mode is a compiler mode
-type Mode string
-
-const (
-	// ModeBinary runs the compiler binary
-	ModeBinary Mode = "binary"
-	// ModeModule runs the compiler as a module
-	ModeModule Mode = "module"
-)
-
 // ModelInfo is config model info
 type ModelInfo struct {
 	Name    string
@@ -90,9 +80,8 @@ type PluginInfo struct {
 
 // CompilerInfo is the compiler info
 type CompilerInfo struct {
-	Mode         Mode
-	Version      string
-	RelativePath string
+	Version string
+	Root    string
 }
 
 // TemplateInfo provides all the variables for templates
@@ -110,7 +99,6 @@ func CompilePlugin(model ModelInfo, config PluginCompilerConfig) (PluginInfo, er
 type PluginCompilerConfig struct {
 	TemplatePath string
 	OutputPath   string
-	Mode         Mode
 }
 
 // NewPluginCompiler creates a new model plugin compiler
@@ -177,23 +165,11 @@ func (c *PluginCompiler) getTemplateInfo(model ModelInfo) (TemplateInfo, error) 
 	if err != nil {
 		return TemplateInfo{}, err
 	}
-
-	md, err := filepath.Abs(c.getModuleDir(model))
-	if err != nil {
-		return TemplateInfo{}, err
-	}
-
-	path, err := filepath.Rel(md, wd)
-	if err != nil {
-		return TemplateInfo{}, err
-	}
-
 	return TemplateInfo{
 		Model: model,
 		Compiler: CompilerInfo{
-			Mode:         c.config.Mode,
-			Version:      compilerVersion,
-			RelativePath: path,
+			Version: compilerVersion,
+			Root:    wd,
 		},
 	}, nil
 }
