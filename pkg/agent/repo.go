@@ -5,6 +5,7 @@ import (
 	"crypto/tls"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"github.com/onosproject/config-models/api/onos/configmodel"
 	"github.com/onosproject/config-models/pkg/compiler"
 	"github.com/onosproject/config-models/pkg/model"
@@ -145,6 +146,7 @@ func getRepoGetCmd() *cobra.Command {
 				Plugin: model.ConfigPluginInfo{
 					Name:    model.Name(response.Model.Name),
 					Version: model.Version(response.Model.Version),
+					File:    fmt.Sprintf("%s-%s.so", response.Model.Name, response.Model.Version),
 				},
 			}
 			bytes, err := json.MarshalIndent(modelInfo, "", "  ")
@@ -191,16 +193,17 @@ func getRepoListCmd() *cobra.Command {
 						Data:         module.Data,
 					})
 				}
-				modelInfo := model.ConfigModelInfo{
+				model := model.ConfigModelInfo{
 					Name:    model.Name(modelInfo.Name),
 					Version: model.Version(modelInfo.Version),
 					Modules: moduleInfos,
 					Plugin: model.ConfigPluginInfo{
 						Name:    model.Name(modelInfo.Name),
 						Version: model.Version(modelInfo.Version),
+						File:    fmt.Sprintf("%s-%s.so", modelInfo.Name, modelInfo.Version),
 					},
 				}
-				bytes, err := json.MarshalIndent(modelInfo, "", "  ")
+				bytes, err := json.MarshalIndent(model, "", "  ")
 				if err != nil {
 					return err
 				}

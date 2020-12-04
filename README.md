@@ -8,10 +8,18 @@ models from YANG modules at runtime.
 ## Agent
 
 The config agent is a tool that supports compiling and managing config models for
-Kubernetes services. The agent is provided as a Docker image which can be deployed 
-either as an init container or as a sidecar container. 
+Kubernetes services. The agent is provided as a Docker image which can be built
+with `make`:
 
-When deployed as an init container, the `config-agent plugin compile` command can be
+```bash
+> make images
+```
+
+Because the agent compiles Go modules, the `config-agent` image is very large and should
+not be extended for service images. Instead, the agent should be deployed either as an
+init container or a sidecar to compile and manage config models as part of a deployment.
+
+When deployed as an init container, the `plugin compile` sub-command can be
 used to compile model plugins for the primary service:
 
 ```bash
@@ -63,7 +71,7 @@ repository with the `repo list` command or get information about a specific mode
   "plugin": {
     "name": "foo",
     "version": "1.0.0",
-    "file": ""
+    "file": "foo-1.0.0.so"
   }
 }
 ```
@@ -77,7 +85,8 @@ import "github.com/onosproject/config-models/pkg/model"
 
 ...
 
-myModel, err := model.Load("my-model-1.0.0.so")
+// Load the foo/1.0.0 model from a shared volume
+fooModel, err := model.Load("models/foo-1.0.0.so")
 ```
 
 The model object that's returned will be a generated implementation of the `ConfigModel` interface.
