@@ -1,4 +1,4 @@
-package plugin
+package model
 
 import (
 	"github.com/openconfig/gnmi/proto/gnmi"
@@ -19,15 +19,16 @@ var modelData = []*gnmi.ModelData{
 	{{- end }}
 }
 
+var ConfigModelInfo = model.ConfigModelInfo{
+    Name: model.Name({{ .Model.Name | quote }}),
+    Version: model.Version({{ .Model.Version | quote }}),
+}
+
 // ConfigModel defines the config model for {{ .Model.Name }} {{ .Model.Version }}
 type ConfigModel struct{}
 
-func (m ConfigModel) Name() model.Name {
-    return modelName
-}
-
-func (m ConfigModel) Version() model.Version {
-    return modelVersion
+func (m ConfigModel) Info() model.ConfigModelInfo {
+    return ConfigModelInfo
 }
 
 func (m ConfigModel) Data() []*gnmi.ModelData {
@@ -42,12 +43,12 @@ func (m ConfigModel) GetStateMode() model.GetStateMode {
     return model.GetStateNone
 }
 
-func (m ConfigModel) Unmarshaller() model.Unmarshaller {
-    return Unmarshaller{}
+func (m ConfigModel) Unmarshaller() model.ConfigModelUnmarshaller {
+    return ConfigModelUnmarshaller{}
 }
 
-func (m ConfigModel) Validator() model.Validator {
-    return Validator{}
+func (m ConfigModel) Validator() model.ConfigModelValidator {
+    return ConfigModelValidator{}
 }
 
 var _ model.ConfigModel = ConfigModel{}

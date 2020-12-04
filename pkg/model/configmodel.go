@@ -45,13 +45,33 @@ const (
 	GetStateExplicitRoPathsExpandWildcards
 )
 
-// ConfigModel is a configuration model
-type ConfigModel interface {
-	// Name returns the config model name
-	Name() Name
+// ConfigModelInfo is config model info
+type ConfigModelInfo struct {
+	Name    Name               `json:"name"`
+	Version Version            `json:"version"`
+	Modules []ConfigModuleInfo `json:"modules"`
+	Plugin  ConfigPluginInfo   `json:"plugin"`
+}
 
-	// Version returns the config model version
-	Version() Version
+// ConfigModuleInfo is a config module info
+type ConfigModuleInfo struct {
+	Name         Name    `json:"name"`
+	Organization string  `json:"organization"`
+	Version      Version `json:"version"`
+	Data         []byte  `json:"data"`
+}
+
+// ConfigPluginInfo is config model plugin info
+type ConfigPluginInfo struct {
+	Name    Name    `json:"name"`
+	Version Version `json:"version"`
+	File    string  `json:"file"`
+}
+
+// ConfigModel is a configuration model data
+type ConfigModel interface {
+	// Info returns the config model info
+	Info() ConfigModelInfo
 
 	// Data returns the config model data
 	Data() []*gnmi.ModelData
@@ -62,21 +82,21 @@ type ConfigModel interface {
 	// GetStateMode returns the get state mode
 	GetStateMode() GetStateMode
 
-	// Unmarshaller returns the config model unmarshaller
-	Unmarshaller() Unmarshaller
+	// ConfigModelUnmarshaller returns the config model unmarshaller
+	Unmarshaller() ConfigModelUnmarshaller
 
-	// Validator returns the config model validator
-	Validator() Validator
+	// ConfigModelValidator returns the config model validator
+	Validator() ConfigModelValidator
 }
 
-// Unmarshaller is a config model unmarshaller
-type Unmarshaller interface {
+// ConfigModelUnmarshaller is a config model unmarshaller
+type ConfigModelUnmarshaller interface {
 	// Unmarshal unmarshals the given config
 	Unmarshal(bytes []byte) (*ygot.ValidatedGoStruct, error)
 }
 
-// Validator is a config model validator
-type Validator interface {
+// ConfigModelValidator is a config model validator
+type ConfigModelValidator interface {
 	// Validate validates the given config struct
 	Validate(model *ygot.ValidatedGoStruct, opts ...ygot.ValidationOption) error
 }

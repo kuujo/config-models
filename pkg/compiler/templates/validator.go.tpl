@@ -1,4 +1,4 @@
-package plugin
+package model
 
 import (
     "errors"
@@ -7,10 +7,10 @@ import (
 	"github.com/onosproject/config-models/pkg/model"
 )
 
-// Validator defines the validator for {{ .Model.Name }} {{ .Model.Version }}
-type Validator struct{}
+// ConfigModelValidator defines the validator for {{ .Model.Name }} {{ .Model.Version }}
+type ConfigModelValidator struct{}
 
-func (v Validator) Validate(ygotModel *ygot.ValidatedGoStruct, opts ...ygot.ValidationOption) error {
+func (v ConfigModelValidator) Validate(ygotModel *ygot.ValidatedGoStruct, opts ...ygot.ValidationOption) error {
 	deviceDeref := *ygotModel
 	device, ok := deviceDeref.(*Device)
 	if !ok {
@@ -19,4 +19,4 @@ func (v Validator) Validate(ygotModel *ygot.ValidatedGoStruct, opts ...ygot.Vali
 	return device.Validate()
 }
 
-var _ model.Validator = Validator{}
+var _ model.ConfigModelValidator = ConfigModelValidator{}

@@ -1,4 +1,4 @@
-package plugin
+package model
 
 import (
 	"github.com/openconfig/ygot/ygot"
@@ -6,10 +6,10 @@ import (
 	"github.com/onosproject/config-models/pkg/model"
 )
 
-// Unmarshaller defines the unmarshaller for {{ .Model.Name }} {{ .Model.Version }}
-type Unmarshaller struct{}
+// ConfigModelUnmarshaller defines the unmarshaller for {{ .Model.Name }} {{ .Model.Version }}
+type ConfigModelUnmarshaller struct{}
 
-func (u Unmarshaller) Unmarshal(jsonTree []byte) (*ygot.ValidatedGoStruct, error) {
+func (u ConfigModelUnmarshaller) Unmarshal(jsonTree []byte) (*ygot.ValidatedGoStruct, error) {
     device := &Device{}
     vgs := ygot.ValidatedGoStruct(device)
     if err := Unmarshal([]byte(jsonTree), device); err != nil {
@@ -18,4 +18,4 @@ func (u Unmarshaller) Unmarshal(jsonTree []byte) (*ygot.ValidatedGoStruct, error
     return &vgs, nil
 }
 
-var _ model.Unmarshaller = Unmarshaller{}
+var _ model.ConfigModelUnmarshaller = ConfigModelUnmarshaller{}

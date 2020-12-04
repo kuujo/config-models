@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/onosproject/config-models/{{ .Model.Name }}_{{ .Model.Version | replace "." "_" }}/plugin"
+	"github.com/onosproject/config-models/{{ .Model.Name }}_{{ .Model.Version | replace "." "_" }}/model"
 )
 
-var ModelPlugin plugin.ModelPlugin
+var ConfigPlugin model.ConfigPlugin
